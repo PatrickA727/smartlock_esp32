@@ -118,20 +118,6 @@ void setup() {
   Firebase.setDoubleDigits(5);
   Firebase.begin(&config, &authh);
 
-  // Blynk.begin(auth, WiFi.SSID().c_str(), WiFi.psk().c_str());
-
-  // if (!Firebase.RTDB.beginStream(&fbdoRead, "/lock/value")) {
-  //   Serial.printf("stream begin error, %s\n\n", fbdoRead.errorReason().c_str());
-  // }
-
-  // if(!Firebase.RTDB.beginStream(&fbdoRead2, "/lock/newfp")) {
-  //   Serial.printf("stream 2 begin error, %s\n\n", fbdoRead2.errorReason().c_str());
-  // }
-
-  // if(!Firebase.RTDB.beginStream(&fbdoRead3, "/lock/resetfp")) {
-  //   Serial.printf("stream 3 begin error, %s\n\n", fbdoRead3.errorReason().c_str());
-  // }
-
   if (!Firebase.RTDB.beginMultiPathStream(&stream, parentPath)) {
     Serial.printf("multi stream begin error: %s\n\n", stream.errorReason().c_str());
   }
@@ -148,14 +134,10 @@ void setup() {
     Serial.println("Fingerprint sensor password incorrect!");
     while (1) { delay(1); }
   }
-
-  // Blynk.virtualWrite(V1, LOW);  // Set Button V1 state to LOW in the Blynk app
-  // Blynk.virtualWrite(V2, LOW);  // Set Button V2 state to LOW in the Blynk app
   Serial.println();
 }
 
 void loop() {
-  // Blynk.run();  // Run Blynk connection
 
   if (Firebase.ready()) {
     // if (!Firebase.RTDB.readStream(&fbdoRead)) {
@@ -206,8 +188,6 @@ void loop() {
   }
 
   if (dataChanged) {
-    
-
     dataChanged = false;
   }
 
@@ -368,27 +348,4 @@ void resetFingerprints() {
   fingerprintCount = 0;
   
   Serial.println("Fingerprint data reset.");
-
-  // Blynk.virtualWrite(V2, LOW); // Set Button V2 state to LOW in the Blynk app
 }
-
-
-
-// BLYNK_WRITE(V2) {
-//   int buttonState = param.asInt();
-//   if (buttonState == HIGH && fingerprintCount < MAX_FINGERPRINTS) {
-//     enrollMode = true;
-//     Blynk.virtualWrite(V2, HIGH); // Set Button V2 state to HIGH in the Blynk app
-//     enrollFingerprint();
-//   } else {
-//     enrollMode = false;
-//     Blynk.virtualWrite(V2, LOW); // Set Button V2 state to LOW in the Blynk app
-//   }
-// }
-
-// BLYNK_WRITE(V3) {
-//   int buttonState = param.asInt();
-//   if (buttonState == HIGH) {
-//     resetFingerprints();
-//   }
-// }
